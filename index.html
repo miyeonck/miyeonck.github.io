@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>신촌 세브란스병원 교통안내</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <style>
+        .editable {
+            border: 2px dashed transparent;
+            transition: all 0.3s ease;
+        }
+        .editable:hover {
+            border-color: #3b82f6;
+            background-color: #eff6ff;
+        }
+        .active-section {
+            background-color: #3b82f6;
+            color: white;
+        }
+        .image-placeholder {
+            border: 2px dashed #d1d5db;
+            background-color: #f9fafb;
+            min-height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-blue-600 text-white p-4 shadow-lg">
+        <div class="container mx-auto flex justify-between items-center">
+            <div>
+                <h1 class="text-2xl font-bold">
+                    <span class="korean">신촌 세브란스병원 교통안내</span>
+                    <span class="chinese hidden">新村世福兰斯医院交通指南</span>
+                </h1>
+                <p class="text-blue-100">
+                    <span class="korean">Severance Hospital Transportation Guide</span>
+                    <span class="chinese hidden">世福兰斯医院交通指南</span>
+                </p>
+            </div>
+            <div class="flex items-center space-x-4">
+                <button id="editToggle" class="bg-white text-blue-600 px-4 py-2 rounded-lg hover:bg-gray-100 transition">
+                    <i class="fas fa-edit mr-2"></i>
+                    <span class="korean">편집 모드</span>
+                    <span class="chinese hidden">编辑模式</span>
+                </button>
+                <button id="langToggle" class="bg-blue-700 px-4 py-2 rounded-lg hover:bg-blue-800 transition">
+                    <i class="fas fa-language mr-2"></i>
+                    <span class="korean">中文</span>
+                    <span class="chinese hidden">한국어</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="container mx-auto p-4">
+        <div class="flex flex-col lg:flex-row gap-6">
+            <!-- Left Sidebar Navigation -->
+            <div class="lg:w-1/4">
+                <div class="bg-white rounded-lg shadow-md p-4 sticky top-4">
+                    <h3 class="text-lg font-semibold mb-4 text-gray-800">
+                        <span class="korean">교통수단 선택</span>
+                        <span class="chinese hidden">选择交通方式</span>
+                    </h3>
+                    <div class="space-y-2">
+                        <button class="nav-btn w-full text-left p-3 rounded-lg hover:bg-blue-50 transition active-section" data-section="hospital-info">
+                            <i class="fas fa-hospital mr-3 text-blue-500"></i>
+                            <span class="korean">병원 전체 소개</span>
+                            <span class="chinese hidden">医院综合介绍</span>
+                        </button>
+                        <button class="nav-btn w-full text-left p-3 rounded-lg hover:bg-blue-50 transition" data-section="bus">
+                            <i class="fas fa-bus mr-3 text-green-500"></i>
+                            <span class="korean">버스</span>
+                            <span class="chinese hidden">公交车</span>
+                        </button>
+                        <button class="nav-btn w-full text-left p-3 rounded-lg hover:bg-blue-50 transition" data-section="subway">
+                            <i class="fas fa-subway mr-3 text-orange-500"></i>
+                            <span class="korean">지하철</span>
+                            <span class="chinese hidden">地铁</span>
+                        </button>
+                        <button class="nav-btn w-full text-left p-3 rounded-lg hover:bg-blue-50 transition" data-section="airport">
+                            <i class="fas fa-plane mr-3 text-purple-500"></i>
+                            <span class="korean">인천공항/김포공항</span>
+                            <span class="chinese hidden">仁川机场/金浦机场</span>
+                        </button>
+                        <button class="nav-btn w-full text-left p-3 rounded-lg hover:bg-blue-50 transition" data-section="car-taxi">
+                            <i class="fas fa-car mr-3 text-red-500"></i>
+                            <span class="korean">자가용/택시</span>
+                            <span class="chinese hidden">自驾车/出租车</span>
+                        </button>
+                        <button class="nav-btn w-full text-left p-3 rounded-lg hover:bg-blue-50 transition" data-section="shuttle">
+                            <i class="fas fa-shuttle-van mr-3 text-indigo-500"></i>
+                            <span class="korean">셔틀버스</span>
+                            <span class="chinese hidden">班车</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Content Area -->
+            <div class="lg:w-3/4">
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <!-- Hospital Info Section -->
+                    <div id="hospital-info" class="content-section fade-in">
+                        <h2 class="text-2xl font-bold mb-6 text-blue-600">
+                            <span class="korean">병원 전체 소개</span>
+                            <span class="chinese hidden">医院综合介绍</span>
+                        </h2>
+                        
+                        <div class="grid md:grid-cols-2 gap-6 mb-6">
+                            <div class="editable p-4 rounded-lg">
+                                <h3 class="text-lg font-semibold mb-3 text-gray-800">
+                                    <span class="korean">기본 정보</span>
+                                    <span class="chinese hidden">基本信息</span>
+                                </h3>
+                                <div class="space-y-2 text-gray-600">
+                                    <p><i class="fas fa-map-marker-alt mr-2 text-red-500"></i><strong>
+                                        <span class="korean">주소:</span>
+                                        <span class="chinese hidden">地址:</span>
+                                    </strong> 03722 서울특별시 서대문구 연세로 50-1</p>
+                                    <p><i class="fas fa-phone mr-2 text-blue-500"></i><strong>
+                                        <span class="korean">대표전화:</span>
+                                        <span class="chinese hidden">总机电话:</span>
+                                    </strong> 1599-1004</p>
+                                    <p><i class="fas fa-calendar-check mr-2 text-green-500"></i><strong>
+                                        <span class="korean">진료예약:</span>
+                                        <span class="chinese hidden">预约挂号:</span>
+                                    </strong> 02-2228-5825（中文）</p>
+                                    <p><i class="fas fa-stethoscope mr-2 text-purple-500"></i><strong>
+                                        <span class="korean">건강검진:</span>
+                                        <span class="chinese hidden">健康体检:</span>
+                                    </strong> 1588-7757</p>
+                                </div>
+                            </div>
+                            
+                            <div class="editable p-4 rounded-lg">
+                                <h3 class="text-lg font-semibold mb-3 text-gray-800">
+                                    <span class="korean">안내사항</span>
+                                    <span class="chinese hidden">注意事项</span>
+                                </h3>
+                                <ul class="space-y-2 text-gray-600">
+                                    <li class="korean">• 상급종합병원으로 초진 시 1,2차 요양기관 진료의뢰서 필요（국민건강보험 가입자에 한함）</li>
+                                    <li class="chinese hidden">• 三级综合医院，初诊时需要1、2级医疗机构转诊单(适用于韩国国民健康保险加入者)</li>
+                                    <li class="korean">• 예약확인은 마이세브란스 앱 또는 1599-1004 ARS 1번 이용</li>
+                                    <li class="chinese hidden">• 预约确认可使用我的世福兰斯APP或拨打1599-1004 ARS 1号键</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div class="editable p-4 rounded-lg">
+                                <h3 class="text-lg font-semibold mb-3 text-gray-800">
+                                    <span class="korean">위치 지도</span>
+                                    <span class="chinese hidden">位置地图</span>
+                                </h3>
+                                <div class="image-placeholder rounded-lg mb-3">
+                                    <i class="fas fa-map text-4xl text-gray-400 mb-2"></i>
+                                    <p class="text-gray-500">
+                                        <span class="korean">지도 이미지 추가</span>
+                                        <span class="chinese hidden">添加地图图片</span>
+                                    </p>
+                                    <button class="add-image-btn mt-2 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">
+                                        <i class="fas fa-plus mr-2"></i>
+                                        <span class="korean">이미지 추가</span>
+                                        <span class="chinese hidden">添加图片</span>
+                                    </button>
+                                </div>
+                                <a href="https://map.naver.com/v5/search/%EC%84%B8%EB%B8%8C%EB%9E%80%EC%8A%A4%EB%B3%91%EC%9B%90" target="_blank" class="inline-flex items-center text-blue-600 hover:text-blue-800">
+                                    <i class="fas fa-external-link-alt mr-2"></i>
+                                    <span class="korean">네이버 지도에서 보기</span>
+                                    <span class="chinese hidden">在Naver地图中查看</span>
+                                </a>
+                            </div>
+                            
+                            <div class="editable p-4 rounded-lg">
+                                <h3 class="text-lg font-semibold mb-3 text-gray-800">
+                                    <span class="korean">병원 건물 배치도</span>
+                                    <span class="chinese hidden">医院建筑布局图</span>
+                                </h3>
+                                <div class="image-placeholder rounded-lg mb-3">
+                                    <i class="fas fa-building text-4xl text-gray-400 mb-2"></i>
+                                    <p class="text-gray-500">
+                                        <span class="korean">건물 배치도 추가</span>
+                                        <span class="chinese hidden">添加建筑布局图</span>
+                                    </p>
+                                    <button class="add-image-btn mt-2 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">
+                                        <i class="fas fa-plus mr-2"></i>
+                                        <span class="korean">이미지 추가</span>
+                                        <span class="chinese hidden">添加图片</span>
+                                    </button>
+                                </div>
+                                <a href="https://sev.severance.healthcare/" target="_blank" class="inline-flex items-center text-blue-600 hover:text-blue-800">
+                                    <i class="fas fa-external-link-alt mr-2"></i>
+                                    <span class="korean">병원 홈페이지</span>
+                                    <span class="chinese hidden">医院官网</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bus Section -->
+                    <div id="bus" class="content-section hidden fade-in">
+                        <h2 class="text-2xl font-bold mb-6 text-green-600">
+                            <span class="korean">버스 이용안내</span>
+                            <span class="chinese hidden">公交车利用指南</span>
+                        </h2>
+                        
+                        <div class="editable p-4 rounded-lg mb-6">
+                            <p class="text-gray-600 mb-4">
+                                <span class="korean"><strong>정류장명:</strong> 세브란스병원앞, 연세대학교앞</span>
+                                <span class="chinese hidden"><strong>站名:</strong> 世福兰斯医院交通指南</span>
+                            </p>
+                            <p class="text-sm text-gray-500">
+                                <span class="korean">※ 하차 후 도보 5분 이내</span>
+                                <span class="chinese hidden">※ 下车后步行5分钟以内</span>
+                            </p>
+                        </div>
+
+                        <div class="space-y-6">
+                            <div class="editable p-4 border-l-4 border-blue-500 bg-blue-50 rounded-r-lg">
+                                <h3 class="text-lg font-semibold mb-3 text-blue-700">
+                                    <span class="korean">간선버스 (파랑)</span>
+                                    <span class="chinese hidden">干线公交 (蓝色)</span>
+                                </h3>
+                                <p class="text-gray-700">163 171 172 173 272 470 472 601 606 672 673 674 700 710 742 750A 750B</p>
+                            </div>
+                            
+                            <div class="editable p-4 border-l-4 border-green-500 bg-green-50 rounded-r-lg">
+                                <h3 class="text-lg font-semibold mb-3 text-green-700">
+                                    <span class="korean">지선버스 (초록)</span>
+                                    <span class="chinese hidden">支线公交 (绿色)</span>
+                                </h3>
+                                <p class="text-gray-700">서대문03 서대문04 서대문05 75 82 6714 7017 7024 7713 7720 7727 7728 7737</p>
+                            </div>
+                            
+                            <div class="editable p-4 border-l-4 border-red-500 bg-red-50 rounded-r-lg">
+                                <h3 class="text-lg font-semibold mb-3 text-red-700">
+                                    <span class="korean">광역버스 (빨강) & 좌석버스</span>
+                                    <span class="chinese hidden">广域公交 (红色) & 座位公交</span>
+                                </h3>
+                                <p class="text-gray-700">1000 1100 1200 1900 6628(M) 6724(M) 7111(M) 7111(G) 7119(M) 7129(M) 7154(M)</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Subway Section -->
+                    <div id="subway" class="content-section hidden fade-in">
+                        <h2 class="text-2xl font-bold mb-6 text-orange-600">
+                            <span class="korean">지하철 이용안내</span>
+                            <span class="chinese hidden">地铁利用指南</span>
+                        </h2>
+                        
+                        <div class="space-y-6">
+                            <div class="editable p-4 border-l-4 border-green-500 bg-green-50 rounded-r-lg">
+                                <h3 class="text-lg font-semibold mb-3 text-green-700 flex items-center">
+                                    <span class="bg-green-500 text-white w-8 h-8 rounded-full flex items-center justify-center mr-3 text-sm font-bold">2</span>
+                                    <span class="korean">2호선 신촌역</span>
+                                    <span class="chinese hidden">2号线 新村站</span>
+                                </h3>
+                                <ul class="space-y-2 text-gray-700">
+                                    <li class="korean">• 1번출구 → 병원 셔틀버스 이용</li>
+                                    <li class="chinese hidden">• 1号出口 → 医院班车</li>
+                                    <li class="korean">• 3번출구 → 도보 8분</li>
+                                    <li class="chinese hidden">• 3号出口 → 步行8分钟</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="editable p-4 border-l-4 border-orange-500 bg-orange-50 rounded-r-lg">
+                                <h3 class="text-lg font-semibold mb-3 text-orange-700 flex items-center">
+                                    <span class="bg-orange-500 text-white w-8 h-8 rounded-full flex items-center justify-center mr-3 text-sm font-bold">3</span>
+                                    <span class="korean">3호선</span>
+                                    <span class="chinese hidden">3号线</span>
+                                </h3>
+                                <div class="space-y-3">
+                                    <div>
+                                        <h4 class="font-semibold text-gray-800">
+                                            <span class="korean">독립문역</span>
+                                            <span class="chinese hidden">独立门站</span>
+                                        </h4>
+                                        <p class="text-gray-700">
+                                            <span class="korean">4번출구 → 470, 750, 7737 버스 환승</span>
+                                            <span class="chinese hidden">4号出口 → 换乘470、750、7737路公交</span>
+                                        </p>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-semibold text-gray-800">
+                                            <span class="korean">경복궁역</span>
+                                            <span class="chinese hidden">景福宫站</span>
+                                        </h4>
+                                        <p class="text-gray-700">
+                                            <span class="korean">1번출구 → 272, 710, 606버스 환승 또는 병원 셔틀버스</span>
+                                            <span class="chinese hidden">1号出口 → 换乘272、710、606路公交或医院班车</span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="editable p-4 border-l-4 border-purple-500 bg-purple-50 rounded-r-lg">
+                                <h3 class="text-lg font-semibold mb-3 text-purple-700">
+                                    <span class="korean">신촌기차역 (경의선)</span>
+                                    <span class="chinese hidden">新村火车站 (京义线)</span>
+                                </h3>
+                                <p class="text-gray-700">
+                                    <span class="korean">신촌역사 우측 개방통로 이용 → 도보 5분</span>
+                                    <span class="chinese hidden">新村站右侧开放通道 → 步行5分钟</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Airport Section -->
+                    <div id="airport" class="content-section hidden fade-in">
+                        <h2 class="text-2xl font-bold mb-6 text-purple-600">
+                            <span class="korean">공항에서 오시는 길</span>
+                            <span class="chinese hidden">从机场前往医院</span>
+                        </h2>
+                        
+                        <div class="space-y-6">
+                            <div class="editable p-4 border-l-4 border-blue-500 bg-blue-50 rounded-r-lg">
+                                <h3 class="text-lg font-semibold mb-4 text-blue-700">
+                                    <span class="korean">인천국제공항</span>
+                                    <span class="chinese hidden">仁川国际机场</span>
+                                </h3>
+                                <div class="space-y-3">
+                                    <h4 class="font-semibold text-gray-800">
+                                        <span class="korean">리무진 버스 이용</span>
+                                        <span class="chinese hidden">机场大巴</span>
+                                    </h4>
+                                    <p class="text-gray-700">
+                                        <span class="korean"><strong>6011번</strong> 버스 → 연세대학교 하차 → 도보 5분</span>
+                                        <span class="chinese hidden"><strong>6011路</strong> 公交 → 延世大学下车 → 步行5分钟</span>
+                                    </p>
+                                    <p class="text-sm text-gray-600">
+                                        <span class="korean">운행간격: 15-20분, 소요시간: 약 70분</span>
+                                        <span class="chinese hidden">发车间隔：15-20分钟，所需时间：约70分钟</span>
+                                    </p>
+                                </div>
+                            </div>
+                            
+                            <div class="editable p-4 border-l-4 border-green-500 bg-green-50 rounded-r-lg">
+                                <h3 class="text-lg font-semibold mb-4 text-green-700">
+                                    <span class="korean">김포공항</span>
+                                    <span class="chinese hidden">金浦机场</span>
+                                </h3>
+                                <div class="space-y-4">
+                                    <div>
+                                        <h4 class="font-semibold text-gray-800">
+                                            <span class="korean">버스 이용 (추천)</span>
+                                            <span class="chinese hidden">公交 (推荐)</span>
+                                        </h4>
+                                        <p class="text-gray-700">
+                                            <span class="korean"><strong>601번</strong> 버스 → 세브란스병원 하차 → 도보 5분</span>
+                                            <span class="chinese hidden"><strong>601路</strong> 公交 → 世博兰斯医院下车 → 步行5分钟</span>
+                                        </p>
+                                        <p class="text-sm text-gray-600">
+                                            <span class="korean">김포공항 6번 게이트 → 6번 정류장에서 탑승</span>
+                                            <span class="chinese hidden">金浦机场6号门 → 6号站台上车</span>
+                                        </p>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-semibold text-gray-800">
+                                            <span class="korean">지하철 이용</span>
+                                            <span class="chinese hidden">地铁</span>
+                                        </h4>
+                                        <ul class="text-gray-700 space-y-1 text-sm">
+                                            <li class="korean">• 5호선 김포공항역 → 영등포구청역 → 2호선 환승</li>
+                                            <li class="chinese hidden">• 5号线金浦机场站 → 永登浦区厅站 → 换乘2号线</li>
+                                            <li class="korean">• 9호선 김포공항역 → 당산역 → 2호선 환승</li>
+                                            <li class="chinese hidden">• 9号线金浦机场站 → 堂山站 → 换乘2号线</li>
+                                            <li class="korean">• → 신촌역 하차 → 1번출구 병원셔틀버스 또는 3번출구 도보 8분</li>
+                                            <li class="chinese hidden">• → 新村站下车 → 1号出口医院班车或3号出口步行8分钟</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="mt-3 p-3 bg-yellow-100 rounded-lg">
+                                    <p class="text-sm text-yellow-800">
+                                        <i class="fas fa-lightbulb mr-2"></i>
+                                        <span class="korean"><strong>팁:</strong> 김포공항에서는 601번 버스가 가장 편리합니다</span>
+                                        <span class="chinese hidden"><strong>提示:</strong> 从金浦机场乘坐601路公交最为便利</span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Car/Taxi Section -->
+                    <div id="car-taxi" class="content-section hidden fade-in">
+                        <h2 class="text-2xl font-bold mb-6 text-red-600">
+                            <span class="korean">자가용/택시 이용안내</span>
+                            <span class="chinese hidden">自驾车/出租车利用指南</span>
+                        </h2>
+                        
+                        <div class="space-y-6">
+                            <div class="editable p-4 border-l-4 border-blue-500 bg-blue-50 rounded-r-lg">
+                                <h3 class="text-lg font-semibold mb-4 text-blue-700">
+                                    <span class="korean">주차안내</span>
+                                    <span class="chinese hidden">停车指南</span>
+                                </h3>
+                                <div class="grid md:grid-cols-2 gap-4">
+                                    <div>
+                                        <h4 class="font-semibold text-gray-800 mb-2">
+                                            <span class="korean">주차요금</span>
+                                            <span class="chinese hidden">停车费</span>
+                                        </h4>
+                                        <ul class="space-y-1 text-gray-700 text-sm">
+                                            <li class="korean">• 최초 30분 무료</li>
+                                            <li class="chinese hidden">• 前30分钟免费</li>
+                                            <li class="korean">• 30분 후 기본요금 2,600원</li>
+                                            <li class="chinese hidden">• 30分钟后基本费用2,600韩元</li>
+                                            <li class="korean">• 이후 10분당 650원 (1시간 3,900원)</li>
+                                            <li class="chinese hidden">• 之后每10分钟650韩元（1小时3,900韩元）</li>
+                                            <li class="korean">• 1일 최대요금 26,000원</li>
+                                            <li class="chinese hidden">• 1日最高费用26,000韩元</li>
+                                        </ul>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-semibold text-gray-800 mb-2">
+                                            <span class="korean">무발권 주차시스템</span>
+                                            <span class="chinese hidden">无票停车系统</span>
+                                        </h4>
+                                        <ul class="space-y-1 text-gray-700 text-sm">
+                                            <li class="korean">• 차량번호 등록 후 자동 정산</li>
+                                            <li class="chinese hidden">• 车牌号登记后自动结算</li>
+                                            <li class="korean">• 등록장소: 처방전 발행기, 주차요금 무인정산기, 본관 1층 주차관제실</li>
+                                            <li class="chinese hidden">• 登记地点：处方单发行机、停车费自助结算机、本馆1楼停车管制室</li>
+                                            <li class="korean">• 문의: 02-2227-8101~2</li>
+                                            <li class="chinese hidden">• 咨询：02-2227-8101~2</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="mt-4">
+                                    <h4 class="font-semibold text-gray-800 mb-2">
+                                        <span class="korean">주차장 위치</span>
+                                        <span class="chinese hidden">停车场位置</span>
+                                    </h4>
+                                    <div class="image-placeholder rounded-lg">
+                                        <i class="fas fa-parking text-4xl text-gray-400 mb-2"></i>
+                                        <p class="text-gray-500">
+                                            <span class="korean">주차장 위치 이미지 추가</span>
+                                            <span class="chinese hidden">添加停车场位置图片</span>
+                                        </p>
+                                        <button class="add-image-btn mt-2 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">
+                                            <i class="fas fa-plus mr-2"></i>
+                                            <span class="korean">이미지 추가</span>
+                                            <span class="chinese hidden">添加图片</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="editable p-4 border-l-4 border-green-500 bg-green-50 rounded-r-lg">
+                                <h3 class="text-lg font-semibold mb-3 text-green-700">
+                                    <span class="korean">네비게이션 검색</span>
+                                    <span class="chinese hidden">导航搜索</span>
+                                </h3>
+                                <div class="space-y-2">
+                                    <p class="text-gray-700">
+                                        <span class="korean"><strong>검색어:</strong> 신촌 세브란스병원</span>
+                                        <span class="chinese hidden"><strong>搜索关键词:</strong> 新村世博兰斯医院</span>
+                                    </p>
+                                    <p class="text-gray-600 text-sm">03722 서울특별시 서대문구 연세로 50-1</p>
+                                </div>
+                            </div>
+                            
+                            <div class="editable p-4 border-l-4 border-yellow-500 bg-yellow-50 rounded-r-lg">
+                                <h3 class="text-lg font-semibold mb-3 text-yellow-700">
+                                    <span class="korean">택시 이용</span>
+                                    <span class="chinese hidden">出租车</span>
+                                </h3>
+                                <div class="space-y-3">
+                                    <div>
+                                        <h4 class="font-semibold text-gray-800">
+                                            <span class="korean">하차 장소</span>
+                                            <span class="chinese hidden">下车地点</span>
+                                        </h4>
+                                        <ul class="space-y-1 text-gray-700 text-sm">
+                                            <li class="korean">• 세브란스병원 정문 (응급진료센터 앞)</li>
+                                            <li class="chinese hidden">• 世福兰斯医院正门（急诊医疗中心前）</li>
+                                            <li class="korean">• 암병원 건물 앞</li>
+                                            <li class="chinese hidden">• 肿瘤医院建筑前</li>
+                                        </ul>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-semibold text-gray-800">
+                                            <span class="korean">예상 요금 (서울 시내 기준)</span>
+                                            <span class="chinese hidden">预计费用（首尔市内基准）</span>
+                                        </h4>
+                                        <ul class="space-y-1 text-gray-700 text-sm">
+                                            <li class="korean">• 서울역에서: 8,500~11,000원</li>
+                                            <li class="chinese hidden">• 从首尔站：8,500~11,000韩元</li>
+                                            <li class="korean">• 강남에서: 15,000~20,000원</li>
+                                            <li class="chinese hidden">• 从江南：15,000~20,000韩元</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Shuttle Section -->
+                    <div id="shuttle" class="content-section hidden fade-in">
+                        <h2 class="text-2xl font-bold mb-6 text-indigo-600">
+                            <span class="korean">셔틀버스 이용안내</span>
+                            <span class="chinese hidden">班车利用指南</span>
+                        </h2>
+                        
+                        <div class="bg-yellow-100 border-l-4 border-yellow-500 p-4 mb-6 rounded-r-lg">
+                            <p class="text-yellow-800">
+                                <i class="fas fa-info-circle mr-2"></i>
+                                <span class="korean">모든 셔틀버스는 평일만 운행하며, 토요일 및 공휴일에는 운행하지 않습니다.</span>
+                                <span class="chinese hidden">所有班车仅在工作日运行，周六及节假日不运行。</span>
+                            </p>
+                        </div>
+                        
+                        <div class="grid lg:grid-cols-2 gap-6">
+                            <div class="editable p-4 border border-gray-200 rounded-lg">
+                                <h3 class="text-lg font-semibold mb-4 text-green-700 flex items-center">
+                                    <span class="bg-green-500 text-white w-8 h-8 rounded-full flex items-center justify-center mr-3 text-sm font-bold">2</span>
+                                    <span class="korean">신촌역 셔틀버스</span>
+                                    <span class="chinese hidden">新村站班车</span>
+                                </h3>
+                                <div class="space-y-3">
+                                    <div>
+                                        <h4 class="font-semibold text-gray-800">
+                                            <span class="korean">승하차 지점</span>
+                                            <span class="chinese hidden">乘降点</span>
+                                        </h4>
+                                        <p class="text-gray-700 text-sm">
+                                            <span class="korean">📍 2호선 신촌역 1번 출구<br>🏥 암병원 3층 현관</span>
+                                            <span class="chinese hidden">📍 2号线新村站1号出口<br>🏥 癌症医院3楼入口</span>
+                                        </p>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-semibold text-gray-800">
+                                            <span class="korean">운행시간</span>
+                                            <span class="chinese hidden">运行时间</span>
+                                        </h4>
+                                        <p class="text-gray-700 text-sm">
+                                            <span class="korean">🕒 평일 약 7분 간격<br>📅 지하철역 출발: 07:30~18:40<br>📅 병원 출발: 07:50~18:30</span>
+                                            <span class="chinese hidden">🕒 工作日约7分钟间隔<br>📅 地铁站出发：07:30~18:40<br>📅 医院出发：07:50~18:30</span>
+                                        </p>
+                                    </div>
+                                    <div class="image-placeholder rounded-lg mt-3">
+                                        <i class="fas fa-camera text-2xl text-gray-400 mb-1"></i>
+                                        <p class="text-gray-500 text-sm">
+                                            <span class="korean">승하차 지점 사진</span>
+                                            <span class="chinese hidden">乘降点照片</span>
+                                        </p>
+                                        <button class="add-image-btn mt-1 bg-indigo-500 text-white px-3 py-1 rounded text-sm hover:bg-indigo-600">
+                                            <i class="fas fa-plus mr-1"></i>
+                                            <span class="korean">추가</span>
+                                            <span class="chinese hidden">添加</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="editable p-4 border border-gray-200 rounded-lg">
+                                <h3 class="text-lg font-semibold mb-4 text-orange-700 flex items-center">
+                                    <span class="bg-orange-500 text-white w-8 h-8 rounded-full flex items-center justify-center mr-3 text-sm font-bold">3</span>
+                                    <span class="korean">경복궁역 셔틀버스</span>
+                                    <span class="chinese hidden">景福宫站班车</span>
+                                </h3>
+                                <div class="space-y-3">
+                                    <div>
+                                        <h4 class="font-semibold text-gray-800">
+                                            <span class="korean">승하차 지점</span>
+                                            <span class="chinese hidden">乘降点</span>
+                                        </h4>
+                                        <p class="text-gray-700 text-sm">
+                                            <span class="korean">📍 3호선 경복궁역 1번 출구<br>(1번출구 50m 전방 사학회관 앞)<br>🏥 암병원 3층 현관</span>
+                                            <span class="chinese hidden">📍 3号线景福宫站1号出口<br>（1号出口前方50m史学会馆前）<br>🏥 癌症医院3楼入口</span>
+                                        </p>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-semibold text-gray-800">
+                                            <span class="korean">운행시간</span>
+                                            <span class="chinese hidden">运行时间</span>
+                                        </h4>
+                                        <p class="text-gray-700 text-sm">
+                                            <span class="korean">🕒 평일 약 30분 간격<br>📅 양방향: 07:30~18:00</span>
+                                            <span class="chinese hidden">🕒 工作日约30分钟间隔<br>📅 双向：07:30~18:00</span>
+                                        </p>
+                                    </div>
+                                    <div class="image-placeholder rounded-lg mt-3">
+                                        <i class="fas fa-camera text-2xl text-gray-400 mb-1"></i>
+                                        <p class="text-gray-500 text-sm">
+                                            <span class="korean">승하차 지점 사진</span>
+                                            <span class="chinese hidden">乘降点照片</span>
+                                        </p>
+                                        <button class="add-image-btn mt-1 bg-indigo-500 text-white px-3 py-1 rounded text-sm hover:bg-indigo-600">
+                                            <i class="fas fa-plus mr-1"></i>
+                                            <span class="korean">추가</span>
+                                            <span class="chinese hidden">添加</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="editable p-4 border border-gray-200 rounded-lg">
+                                <h3 class="text-lg font-semibold mb-4 text-blue-700">
+                                    <span class="korean">서울(서부)역 셔틀버스</span>
+                                    <span class="chinese hidden">首尔(西部)站班车</span>
+                                </h3>
+                                <div class="space-y-3">
+                                    <div>
+                                        <h4 class="font-semibold text-gray-800">
+                                            <span class="korean">승하차 지점</span>
+                                            <span class="chinese hidden">乘降点</span>
+                                        </h4>
+                                        <p class="text-gray-700 text-sm">
+                                            <span class="korean">📍 서울(서부)역 코레일 본사 앞<br>🏥 본관 3층</span>
+                                            <span class="chinese hidden">📍 首尔(西部)站韩国铁道公社总部前<br>🏥 本馆3楼</span>
+                                        </p>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-semibold text-gray-800">
+                                            <span class="korean">운행시간</span>
+                                            <span class="chinese hidden">运行时间</span>
+                                        </h4>
+                                        <p class="text-gray-700 text-sm">
+                                            <span class="korean">🕒 평일 약 30분 간격<br>📅 지하철역 출발: 07:30~18:00<br>📅 병원 출발: 08:00~18:00</span>
+                                            <span class="chinese hidden">🕒 工作日约30分钟间隔<br>📅 地铁站出发：07:30~18:00<br>📅 医院出发：08:00~18:00</span>
+                                        </p>
+                                    </div>
+                                    <div class="image-placeholder rounded-lg mt-3">
+                                        <i class="fas fa-camera text-2xl text-gray-400 mb-1"></i>
+                                        <p class="text-gray-500 text-sm">
+                                            <span class="korean">승하차 지점 사진</span>
+                                            <span class="chinese hidden">乘降点照片</span>
+                                        </p>
+                                        <button class="add-image-btn mt-1 bg-indigo-500 text-white px-3 py-1 rounded text-sm hover:bg-indigo-600">
+                                            <i class="fas fa-plus mr-1"></i>
+                                            <span class="korean">추가</span>
+                                            <span class="chinese hidden">添加</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="editable p-4 border border-gray-200 rounded-lg">
+                                <h3 class="text-lg font-semibold mb-4 text-purple-700">
+                                    <span class="korean">용산역 셔틀버스</span>
+                                    <span class="chinese hidden">龙山站班车</span>
+                                </h3>
+                                <div class="space-y-3">
+                                    <div>
+                                        <h4 class="font-semibold text-gray-800">
+                                            <span class="korean">승하차 지점</span>
+                                            <span class="chinese hidden">乘降点</span>
+                                        </h4>
+                                        <p class="text-gray-700 text-sm">
+                                            <span class="korean">📍 용산역 공항버스 정류장<br>🏥 본관 3층</span>
+                                            <span class="chinese hidden">📍 龙山站机场巴士站<br>🏥 本馆3楼</span>
+                                        </p>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-semibold text-gray-800">
+                                            <span class="korean">운행시간</span>
+                                            <span class="chinese hidden">运行时间</span>
+                                        </h4>
+                                        <p class="text-gray-700 text-sm">
+                                            <span class="korean">🕒 평일 약 30분 간격<br>📅 지하철역 출발: 07:30~18:00<br>📅 병원 출발: 08:00~18:00</span>
+                                            <span class="chinese hidden">🕒 工作日约30分钟间隔<br>📅 地铁站出发：07:30~18:00<br>📅 医院出发：08:00~18:00</span>
+                                        </p>
+                                    </div>
+                                    <div class="image-placeholder rounded-lg mt-3">
+                                        <i class="fas fa-camera text-2xl text-gray-400 mb-1"></i>
+                                        <p class="text-gray-500 text-sm">
+                                            <span class="korean">승하차 지점 사진</span>
+                                            <span class="chinese hidden">乘降点照片</span>
+                                        </p>
+                                        <button class="add-image-btn mt-1 bg-indigo-500 text-white px-3 py-1 rounded text-sm hover:bg-indigo-600">
+                                            <i class="fas fa-plus mr-1"></i>
+                                            <span class="korean">추가</span>
+                                            <span class="chinese hidden">添加</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-6 editable p-4 border-l-4 border-indigo-500 bg-indigo-50 rounded-r-lg">
+                            <h3 class="text-lg font-semibold mb-3 text-indigo-700">
+                                <span class="korean">원내순환 셔틀</span>
+                                <span class="chinese hidden">院内循环班车</span>
+                            </h3>
+                            <div class="grid md:grid-cols-2 gap-4">
+                                <div>
+                                    <h4 class="font-semibold text-gray-800">
+                                        <span class="korean">운행구간</span>
+                                        <span class="chinese hidden">运行区间</span>
+                                    </h4>
+                                    <p class="text-gray-700 text-sm">
+                                        <span class="korean">📍 암병원 1층 승차장<br>📍 전문병원 앞</span>
+                                        <span class="chinese hidden">📍 肿瘤医院1楼乘车场<br>📍 专门医院前</span>
+                                    </p>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold text-gray-800">
+                                        <span class="korean">운행시간</span>
+                                        <span class="chinese hidden">运行时间</span>
+                                    </h4>
+                                    <p class="text-gray-700 text-sm">
+                                        <span class="korean">🕒 평일 수시운행<br>📅 08:00~17:00</span>
+                                        <span class="chinese hidden">🕒 工作日随时运行<br>📅 08:00~17:00</span>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="mt-3 p-3 bg-blue-100 rounded-lg">
+                                <p class="text-sm text-blue-800">
+                                    <i class="fas fa-heart mr-2"></i>
+                                    <span class="korean">노약자 및 임산부를 위한 원내 이동 서비스</span>
+                                    <span class="chinese hidden">为老弱者及孕妇提供的院内移动服务</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white p-6 mt-12">
+        <div class="container mx-auto text-center">
+            <p class="mb-2">
+                <span class="korean">신촌 세브란스병원 | 03722 서울특별시 서대문구 연세로 50-1</span>
+                <span class="chinese hidden">新村世福兰斯医院 | 03722 首尔特别市西大门区延世路50-1</span>
+            </p>
+            <p class="text-gray-400">
+                <span class="korean">대표전화: 1599-1004 | 진료예약: 1599-1004 | 건강검진: 1588-7757</span>
+                <span class="chinese hidden">总机电话：1599-1004 | 预约挂号：1599-1004 | 健康体检：1588-7757</span>
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        let isEditMode = false;
+        let currentLang = 'korean';
+
+        // Language Toggle
+        document.getElementById('langToggle').addEventListener('click', function() {
+            currentLang = currentLang === 'korean' ? 'chinese' : 'korean';
+            
+            if (currentLang === 'korean') {
+                document.querySelectorAll('.korean').forEach(el => el.classList.remove('hidden'));
+                document.querySelectorAll('.chinese').forEach(el => el.classList.add('hidden'));
+            } else {
+                document.querySelectorAll('.korean').forEach(el => el.classList.add('hidden'));
+                document.querySelectorAll('.chinese').forEach(el => el.classList.remove('hidden'));
+            }
+        });
+
+        // Edit Mode Toggle
+        document.getElementById('editToggle').addEventListener('click', function() {
+            isEditMode = !isEditMode;
+            const editableElements = document.querySelectorAll('.editable');
+            
+            if (isEditMode) {
+                this.innerHTML = '<i class="fas fa-save mr-2"></i>' + 
+                    '<span class="korean">저장</span><span class="chinese hidden">保存</span>';
+                this.classList.add('bg-green-600', 'hover:bg-green-700');
+                this.classList.remove('bg-white', 'text-blue-600', 'hover:bg-gray-100');
+                
+                editableElements.forEach(el => {
+                    el.style.border = '2px dashed #3b82f6';
+                    el.style.backgroundColor = '#eff6ff';
+                    el.contentEditable = true;
+                });
+            } else {
+                this.innerHTML = '<i class="fas fa-edit mr-2"></i>' + 
+                    '<span class="korean">편집 모드</span><span class="chinese hidden">编辑模式</span>';
+                this.classList.remove('bg-green-600', 'hover:bg-green-700');
+                this.classList.add('bg-white', 'text-blue-600', 'hover:bg-gray-100');
+                
+                editableElements.forEach(el => {
+                    el.style.border = '2px dashed transparent';
+                    el.style.backgroundColor = 'transparent';
+                    el.contentEditable = false;
+                });
+            }
+        });
+
+        // Navigation
+        document.querySelectorAll('.nav-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const section = this.dataset.section;
+                
+                // Update active button
+                document.querySelectorAll('.nav-btn').forEach(b => {
+                    b.classList.remove('active-section');
+                });
+                this.classList.add('active-section');
+                
+                // Show corresponding section
+                document.querySelectorAll('.content-section').forEach(s => {
+                    s.classList.add('hidden');
+                });
+                
+                const targetSection = document.getElementById(section);
+                if (targetSection) {
+                    targetSection.classList.remove('hidden');
+                    targetSection.classList.add('fade-in');
+                }
+            });
+        });
+
+        // Image Upload Functionality
+        document.querySelectorAll('.add-image-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const input = document.createElement('input');
+                input.type = 'file';
+                input.accept = 'image/*';
+                
+                input.onchange = function(e) {
+                    const file = e.target.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            const placeholder = btn.closest('.image-placeholder');
+                            placeholder.innerHTML = `
+                                <img src="${e.target.result}" alt="업로드된 이미지" class="max-w-full h-auto rounded-lg">
+                                <button class="change-image-btn mt-2 bg-blue-500 text-white px-3 py-1 rounded text-sm hover:bg-blue-600">
+                                    <i class="fas fa-edit mr-1"></i>
+                                    <span class="korean">이미지 변경</span>
+                                    <span class="chinese hidden">更换图片</span>
+                                </button>
+                            `;
+                            
+                            // Add change image functionality
+                            placeholder.querySelector('.change-image-btn').addEventListener('click', function() {
+                                input.click();
+                            });
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                };
+                
+                input.click();
+            });
+        });
+
+        // Initialize with hospital info section
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('hospital-info').classList.remove('hidden');
+        });
+    </script>
+</body>
+</html>
